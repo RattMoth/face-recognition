@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
 import ImageInputForm from './components/ImageInputForm/ImageInputForm';
@@ -8,17 +8,27 @@ import './App.css';
 import 'tachyons';
 import Particles from 'react-particles-js';
 
-function App() {
-  return (
-    <div className="App">
-      <Particles className="particles" params={particleStyle} />
-      <Navigation />
-      <Logo />
-      <Rank />
-      <ImageInputForm />
-      <FaceRecognition />
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      robots: [],
+      searchField: ''
+    };
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <Particles className="particles" params={particleStyle} />
+        <Navigation />
+        <Logo />
+        <Rank />
+        <ImageInputForm />
+        <FaceRecognition />
+      </div>
+    );
+  }
 }
 
 const particleStyle = {
