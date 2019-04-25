@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ImageInputForm = () => {
+const ImageInputForm = ({ inputChange, displayImage }) => {
   return (
     <div>
       <p className="f4">
@@ -8,20 +8,21 @@ const ImageInputForm = () => {
       </p>
 
       {/* Tachyons form */}
-      <form style={inputStyle} class="pa4 black-80">
+      <form onSubmit={displayImage} style={inputStyle} className="pa4 black-80">
         <div className="pa4 shadow-5 br2">
           <div className="center">
             <input
+              onChange={inputChange}
               id="name"
-              class="input-reset ba b--black-20 pa2 mb2 db w-100"
+              className="input-reset ba b--black-20 pa2 mb2 db w-100"
               type="text"
               aria-describedby="name-desc"
             />
-            <a class="grow f6 link ba ph3 pv2 mb2 white" href="#0">
+            <button className="grow f6 link ba ph3 pv2 mb2 white" href="#0">
               Detect
-            </a>
+            </button>
           </div>
-          <small id="name-desc" class="white f6 black-60 db mb2">
+          <small id="name-desc" className="white f6 black-60 db mb2">
             Make sure the url points directly to the image's source.
           </small>
         </div>

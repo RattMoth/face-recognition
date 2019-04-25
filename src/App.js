@@ -12,9 +12,23 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      imageUrlInput: ''
+      imageUrlInput: '',
+      loadedImage: ''
     };
   }
+
+  onInputChange = event => {
+    this.setState({ imageUrlInput: event.target.value });
+  };
+
+  onSubmit = event => {
+    event.preventDefault();
+    if (this.state.imageUrlInput.length === 0) {
+      alert('Please enter a URL');
+    } else {
+      this.setState({ loadedImage: this.state.imageUrlInput });
+    }
+  };
 
   render() {
     return (
@@ -23,8 +37,11 @@ class App extends Component {
         <Navigation />
         <Logo />
         <Rank />
-        <ImageInputForm />
-        <FaceRecognition />
+        <ImageInputForm
+          displayImage={this.onSubmit}
+          inputChange={this.onInputChange}
+        />
+        <FaceRecognition loadedImage={this.state.loadedImage} />
       </div>
     );
   }
