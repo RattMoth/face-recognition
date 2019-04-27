@@ -18,7 +18,7 @@ const ImageInputForm = ({ inputChange, displayImage }) => {
               type="text"
               aria-describedby="name-desc"
             />
-            <button className="grow f6 link ba ph3 pv2 mb2 white" href="#0">
+            <button className="grow f6 link ba ph3 pv2 mb2" href="#0">
               Detect
             </button>
           </div>
@@ -33,14 +33,8 @@ const ImageInputForm = ({ inputChange, displayImage }) => {
 };
 
 const inputStyle = {
-  maxWidth: '50vw',
+  maxWidth: '80vw',
   margin: 'auto'
 };
 
-// const backgroundPattern = {
-//   background:
-//     'linear-gradient(135deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px),\nlinear-gradient(225deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px)0 64px',
-//   backgroundColor: '#708090',
-//   backgroundSize: '64px 128px'
-// };
 export default ImageInputForm;
