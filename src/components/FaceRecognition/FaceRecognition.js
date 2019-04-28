@@ -1,10 +1,27 @@
 import React from 'react';
+import './FaceRecognition.css';
 
-const FaceRecognition = ({ loadedImage }) => {
+const FaceRecognition = ({ loadedImage, box }) => {
   if (loadedImage.length > 0) {
     return (
-      <div>
-        <img style={imageStyle} src={loadedImage} alt="loaded" />
+      <div className="center">
+        <div className="absolute mt2">
+          <img
+            id="inputImage"
+            style={imageStyle}
+            src={loadedImage}
+            alt="loaded"
+          />
+          <div
+            className="bounding-box"
+            style={{
+              top: box.topRow,
+              right: box.rightCol,
+              bottom: box.bottomRow,
+              left: box.leftCol
+            }}
+          />
+        </div>
       </div>
     );
   } else {
@@ -17,7 +34,8 @@ const FaceRecognition = ({ loadedImage }) => {
 };
 
 const imageStyle = {
-  maxWidth: '60%'
+  width: '500px',
+  height: 'auto'
 };
 
 export default FaceRecognition;
