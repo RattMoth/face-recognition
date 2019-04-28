@@ -17,7 +17,7 @@ const FaceRecognition = ({ loadedImage }) => {
 };
 
 const imageStyle = {
-  maxWidth: '70%'
+  maxWidth: '60%'
 };
 
 export default FaceRecognition;

@@ -5,8 +5,14 @@ import ImageInputForm from './components/ImageInputForm/ImageInputForm';
 import Rank from './components/Rank/Rank';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import './App.css';
+// Imported dependencies
 import 'tachyons';
 import Particles from 'react-particles-js';
+import Clarifai from 'clarifai';
+
+const app = new Clarifai.App({
+  apiKey: '767ef821cf0a4a4783f1c39e1248cae0'
+});
 
 class App extends Component {
   constructor() {
@@ -23,11 +29,20 @@ class App extends Component {
 
   onSubmit = event => {
     event.preventDefault();
-    if (this.state.imageUrlInput.length === 0) {
-      alert('Please enter a URL');
-    } else {
-      this.setState({ loadedImage: this.state.imageUrlInput });
-    }
+    this.setState({ loadedImage: this.state.imageUrlInput });
+
+    app.models
+      .predict(Clarifai.FACE_DETECT_MODEL, this.state.imageUrlInput)
+      .then(
+        function(response) {
+          console.log(
+            response.outputs[0].data.regions[0].region_info.bounding_box
+          );
+        },
+        function(err) {
+          console.log(err);
+        }
+      );
   };
 
   render() {
