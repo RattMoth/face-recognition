@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Navigation from './components/Navigation/Navigation';
+// import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
 import ImageInputForm from './components/ImageInputForm/ImageInputForm';
-import Rank from './components/Rank/Rank';
+// import Rank from './components/Rank/Rank';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import './App.css';
 // Imported dependencies
@@ -63,9 +63,9 @@ class App extends Component {
     return (
       <div className="App">
         <Particles className="particles" params={particleStyle} />
-        <Navigation />
+        {/* <Navigation /> */}
         <Logo />
-        <Rank />
+        {/* <Rank /> */}
         <ImageInputForm
           displayImage={this.onSubmit}
           inputChange={this.onInputChange}
