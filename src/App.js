@@ -3,6 +3,7 @@ import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
 import ImageInputForm from './components/ImageInputForm/ImageInputForm';
 import Rank from './components/Rank/Rank';
+import Signin from './components/Signin/Signin'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import './App.css';
 // Imported dependencies
@@ -20,7 +21,8 @@ class App extends Component {
     this.state = {
       imageUrlInput: '',
       loadedImage: '',
-      box: {}
+      box: {},
+      route: 'sigin'
     };
   }
 
@@ -43,7 +45,7 @@ class App extends Component {
     this.setState({ imageUrlInput: event.target.value });
   };
 
-  onSubmit = event => {
+  onPicSubmit = event => {
     event.preventDefault();
     this.setState({ loadedImage: this.state.imageUrlInput });
 
@@ -59,21 +61,30 @@ class App extends Component {
     this.setState({ box: boxData });
   };
 
+  onRouteChange = () => {
+
+  }
+
   render() {
     return (
       <div className="App">
         <Particles className="particles" params={particleStyle} />
         <Navigation />
-        <Logo />
-        <Rank />
-        <ImageInputForm
-          displayImage={this.onSubmit}
-          inputChange={this.onInputChange}
-        />
-        <FaceRecognition
-          box={this.state.box}
-          loadedImage={this.state.loadedImage}
-        />
+        { this.state.route === 'signin'
+          ? <Signin onRouteChange={this.onRouteChange} />
+          : <div>
+            <Logo />
+            <Rank />
+            <ImageInputForm
+              displayImage={this.onPicSubmit}
+              inputChange={this.onInputChange}
+            />
+            <FaceRecognition
+              box={this.state.box}
+              loadedImage={this.state.loadedImage}
+            />
+          </div>
+        }
       </div>
     );
   }
