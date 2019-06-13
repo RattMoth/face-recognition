@@ -4,6 +4,7 @@ import Logo from './components/Logo/Logo';
 import ImageInputForm from './components/ImageInputForm/ImageInputForm';
 import Rank from './components/Rank/Rank';
 import Signin from './components/Signin/Signin'
+import Register from './components/Register/Register'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import './App.css';
 // Imported dependencies
@@ -22,7 +23,7 @@ class App extends Component {
       imageUrlInput: '',
       loadedImage: '',
       box: {},
-      route: 'sigin'
+      route: 'signin'
     };
   }
 
@@ -54,36 +55,40 @@ class App extends Component {
       .then(response =>
         this.showBoundingBox(this.calculateFaceLocation(response))
       )
-      .catch(error => console.log('what happened???', error));
+      .catch(error => console.log('A problem occured when Clarifai attempted to analyze the photo. Is the url a direct link to a clearly displayed face?', error));
   };
 
   showBoundingBox = boxData => {
     this.setState({ box: boxData });
   };
 
-  onRouteChange = () => {
-
+  onRouteChange = (route) => {
+    this.setState({route: route})
   }
 
   render() {
     return (
       <div className="App">
         <Particles className="particles" params={particleStyle} />
-        <Navigation />
-        { this.state.route === 'signin'
-          ? <Signin onRouteChange={this.onRouteChange} />
-          : <div>
-            <Logo />
-            <Rank />
-            <ImageInputForm
-              displayImage={this.onPicSubmit}
-              inputChange={this.onInputChange}
-            />
-            <FaceRecognition
-              box={this.state.box}
-              loadedImage={this.state.loadedImage}
-            />
-          </div>
+        <Navigation onRouteChange={this.onRouteChange} route={this.state.route} />
+        { this.state.route === 'home'
+          ? <div>
+          <Logo />
+          <Rank />
+          <ImageInputForm
+            displayImage={this.onPicSubmit}
+            inputChange={this.onInputChange}
+          />
+          <FaceRecognition
+            box={this.state.box}
+            loadedImage={this.state.loadedImage}
+          />
+        </div>
+          : (
+            this.state.route === 'signin'
+            ? <Signin onRouteChange={this.onRouteChange}/>
+            : <Register onRouteChange={this.onRouteChange}/>
+          )
         }
       </div>
     );
