@@ -23,8 +23,33 @@ class App extends Component {
       imageUrlInput: '',
       loadedImage: '',
       box: {},
-      route: 'signin'
+      route: 'signin',
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        password: '',
+        entries: 0,
+        joined: '',
+      }
     };
+  }
+
+  componentDidMount() {
+    fetch('http://localhost:3001')
+      .then(response => response.json())
+      .then(console.log)
+  }
+
+  loadUser = (data) => {
+    this.setState({user: {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      entries: data.entries,
+      joined: data.joined,
+    }})
   }
 
   calculateFaceLocation = data => {
@@ -52,9 +77,23 @@ class App extends Component {
 
     app.models
       .predict(Clarifai.FACE_DETECT_MODEL, this.state.imageUrlInput)
-      .then(response =>
+      .then((response) => {
+        if (response) {
+          fetch('http://localhost:3001/image', {
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              id: this.state.user.id
+            })
+          })
+        }
         this.showBoundingBox(this.calculateFaceLocation(response))
-      )
+      })
+      .then(response => response.json())
+      .then(count => {
+        console.log('made it here')
+        this.setState(Object.assign(this.state.user, {entries: count}))
+      })
       .catch(error => console.log('A problem occured when Clarifai attempted to analyze the photo. Is the url a direct link to a clearly displayed face?', error));
   };
 
@@ -74,7 +113,7 @@ class App extends Component {
         { this.state.route === 'home'
           ? <div>
           <Logo />
-          <Rank />
+          <Rank name={this.state.user.name} entries={this.state.user.entries}/>
           <ImageInputForm
             displayImage={this.onPicSubmit}
             inputChange={this.onInputChange}
@@ -86,8 +125,8 @@ class App extends Component {
         </div>
           : (
             this.state.route === 'signin'
-            ? <Signin onRouteChange={this.onRouteChange}/>
-            : <Register onRouteChange={this.onRouteChange}/>
+            ? <Signin  loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+            : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
           )
         }
       </div>
