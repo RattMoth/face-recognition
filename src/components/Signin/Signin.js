@@ -18,27 +18,43 @@ class Signin extends React.Component {
   }
 
   onSubmitSignin = () => {
-    fetch('http://localhost:3001/signin', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        email: this.state.signinEmail,
-        password: this.state.signinPassword
+    if (this.state.signinEmail && this.state.signinPassword) {
+      fetch('http://localhost:3001/signin', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          email: this.state.signinEmail,
+          password: this.state.signinPassword
+        })
       })
-    })
-      .then(res => res.json())
-      .then(user => {
-        if(user.id) {
-          this.props.loadUser(user)
-          this.props.onRouteChange('home')
-        }
-      })
+        .then(res => res.json())
+        .then(user => {
+          if(user.id) {
+            this.props.loadUser(user)
+            this.props.onRouteChange('home')
+          }
+          else {
+            alert(user)
+          }
+        })
+    } else {
+      alert('Please fill out all fields.');
+    }
+  }
+
+  onKeyPress = e => {
+    if (e.which === 13) {
+      this.onSubmitSignin();
+    }
   }
 
   render() {
     const { onRouteChange } = this.props;
     return (
-      <article className="br3 ba dark-gray b--black10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
+      <article 
+        className="br3 ba dark-gray b--black10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center" 
+        onKeyPress={this.onKeyPress}
+        >
         <main className="pa4 white">
           <div className="measure">
             <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
