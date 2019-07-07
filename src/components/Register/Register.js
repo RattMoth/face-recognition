@@ -23,7 +23,8 @@ class Register extends React.Component {
   }
 
   onSubmitRegister = () => {
-    fetch('http://localhost:3001/register', {
+    if (this.state.email && this.state.name && this.state.password) {
+      fetch('http://localhost:3001/register', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -34,17 +35,28 @@ class Register extends React.Component {
     })
       .then(res => res.json())
       .then(user => {
-        if (user) {
-          this.props.loadUser(user);
-          this.props.onRouteChange('home');
-        }
-      })
+        this.props.loadUser(user);
+        this.props.onRouteChange('home');
+        })
+      .catch(err => alert('Error creating user.'))
+    } else {
+      alert('Please fill out all fields')
+    }
+  }
+
+  onKeyPress = e => {
+    if (e.which === 13) {
+      this.onSubmitRegister();
+    }
   }
 
   render() {
     const { onRouteChange } = this.props;
     return (
-      <article className="br3 ba dark-gray b--black10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
+      <article 
+        className="br3 ba dark-gray b--black10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center" 
+        onKeyPress={this.onKeyPress}
+        >
         <main className="pa4 white">
           <div className="measure">
             <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
@@ -57,6 +69,7 @@ class Register extends React.Component {
                   name="name"
                   id="name"
                   onChange={this.onNameChange}
+                  required
                 ></input>
               </div>
               <div className="mt3">
@@ -67,6 +80,7 @@ class Register extends React.Component {
                   name="email-address"
                   id="email-address"
                   onChange={this.onEmailChange}
+                  required
                 ></input>
               </div>
               <div className="mv3">
@@ -77,6 +91,7 @@ class Register extends React.Component {
                   name="password"
                   id="password"
                   onChange={this.onPasswordChange}
+                  required
                 ></input>
               </div>
             </fieldset>
