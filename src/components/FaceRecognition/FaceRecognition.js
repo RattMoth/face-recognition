@@ -10,7 +10,7 @@ const FaceRecognition = ({ loadedImage, box }) => {
             id="inputImage"
             style={imageStyle}
             src={loadedImage}
-            alt="loaded"
+            alt="Failed to load"
           />
           <div
             className="bounding-box"
