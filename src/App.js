@@ -74,10 +74,10 @@ class App extends Component {
   onPicSubmit = event => {
     event.preventDefault();
     this.setState({ loadedImage: this.state.imageUrlInput });
-
+    
     app.models
-      .predict(Clarifai.FACE_DETECT_MODEL, this.state.imageUrlInput)
-      .then((response) => {
+    .predict(Clarifai.FACE_DETECT_MODEL, this.state.imageUrlInput)
+    .then((response) => {
         if (response) {
           fetch('http://localhost:3001/image', {
             method: 'put',
@@ -86,15 +86,17 @@ class App extends Component {
               id: this.state.user.id
             })
           })
+          .then(response => response.json())
+          .then(count => {
+            this.setState(Object.assign(this.state.user, {entries: count}))
+          })
+          this.showBoundingBox(this.calculateFaceLocation(response))
         }
-        this.showBoundingBox(this.calculateFaceLocation(response))
       })
-      .then(response => response.json())
-      .then(count => {
-        console.log('made it here')
-        this.setState(Object.assign(this.state.user, {entries: count}))
-      })
-      .catch(error => console.log('A problem occured when Clarifai attempted to analyze the photo. Is the url a direct link to a clearly displayed face?', error));
+      .catch(error => {
+         console.log(error.status, error.statusText);
+         alert('A problem occured when Clarifai attempted to analyze the photo. Is the url a direct link to a clearly displayed face?')
+      });
   };
 
   showBoundingBox = boxData => {
