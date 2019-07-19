@@ -10,35 +10,18 @@ import './App.css';
 // Imported dependencies
 import 'tachyons';
 import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
-
-const app = new Clarifai.App({
-  apiKey: '767ef821cf0a4a4783f1c39e1248cae0'
-});
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      imageUrlInput: '',
-      loadedImage: '',
-      box: {},
-      route: 'signin',
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        password: '',
-        entries: 0,
-        joined: '',
-      }
-    };
+    this.state = initialState;
   }
 
   componentDidMount() {
     fetch('http://localhost:3001')
       .then(response => response.json())
       .then(console.log)
+      .catch(err => console.log(err))
   }
 
   loadUser = (data) => {
@@ -75,8 +58,14 @@ class App extends Component {
     event.preventDefault();
     this.setState({ loadedImage: this.state.imageUrlInput });
     
-    app.models
-    .predict(Clarifai.FACE_DETECT_MODEL, this.state.imageUrlInput)
+    fetch('http://localhost:3001/imageurl', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        input: this.state.imageUrlInput
+      })
+    })
+    .then(response => response.json())
     .then((response) => {
         if (response) {
           fetch('http://localhost:3001/image', {
@@ -90,6 +79,8 @@ class App extends Component {
           .then(count => {
             this.setState(Object.assign(this.state.user, {entries: count}))
           })
+          .catch(err => console.log(err))
+
           this.showBoundingBox(this.calculateFaceLocation(response))
         }
       })
@@ -104,7 +95,12 @@ class App extends Component {
   };
 
   onRouteChange = (route) => {
-    this.setState({route: route})
+    if (route === 'signin') {
+      this.setState(initialState);
+      // Email and user info is not cleared. Why?
+    } else {
+      this.setState({route: route})
+    };
   }
 
   render() {
@@ -133,6 +129,21 @@ class App extends Component {
         }
       </div>
     );
+  }
+}
+
+const initialState = {
+  imageUrlInput: '',
+  loadedImage: '',
+  box: {},
+  route: 'signin',
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    password: '',
+    entries: 0,
+    joined: '',
   }
 }
 
