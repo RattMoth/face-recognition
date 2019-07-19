@@ -23,7 +23,11 @@ class Register extends React.Component {
   }
 
   onSubmitRegister = () => {
-    if (this.state.email && this.state.name && this.state.password) {
+    if (!EMAIL_REGEX.test(this.state.email)) {
+      alert('Invalid email address')
+    }
+
+    else if (this.state.email && this.state.name && this.state.password) {
       fetch('http://localhost:3001/register', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -112,5 +116,7 @@ class Register extends React.Component {
     );
   }
 };
+
+const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
 export default Register;
